@@ -90,7 +90,7 @@ class RequestHandledListener implements ListenerInterface
             /** @var Dispatched $dispatched */
             $dispatched = $psr7Request->getAttribute(Dispatched::class);
             $entry = IncomingEntry::make([
-                'ip_address' => $psr7Request->getServerParams()['remote_addr'] ?? 'unknown',
+                'ip_address' => $psr7Request->getHeaderLine('x-real-ip') ?: $psr7Request->getServerParams()['remote_addr'] ?? 'unknown',
                 'uri' => $psr7Request->getRequestTarget(),
                 'method' => $psr7Request->getMethod(),
                 'controller_action' => $dispatched->handler ? $dispatched->handler->callback : '',
