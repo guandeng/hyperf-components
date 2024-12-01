@@ -37,10 +37,9 @@ class UserProcessesBroadcaster implements BroadcasterInterface
         if (Constant::isCoroutineServer()) {
             return;
         }
-        $serializeMessage = serialize($message);
         if ($this->id !== null) {
             $processes = ProcessCollector::get($this->name);
-            $processes[$this->id]->write($serializeMessage);
+            $processes[$this->id]->write(serialize($message));
             return;
         }
 
@@ -49,8 +48,11 @@ class UserProcessesBroadcaster implements BroadcasterInterface
         } else {
             $processes = ProcessCollector::all();
         }
-        foreach ($processes as $process) {
-            $process->write($serializeMessage);
+        if ($processes) {
+            $serializeMessage = serialize($message);
+            foreach ($processes as $process) {
+                $process->write($serializeMessage);
+            }
         }
     }
 }
