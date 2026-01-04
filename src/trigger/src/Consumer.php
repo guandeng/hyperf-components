@@ -63,7 +63,12 @@ class Consumer
             $this->serverMutex = make(ServerMutexInterface::class, [
                 'connection' => $this->connection,
                 'options' => (array) $this->config->get('server_mutex', []),
-                'owner' => Util::getInternalIp(),
+                'owner' => sprintf(
+                    '%s:%s:%s',
+                    gethostname(),
+                    microtime(true),
+                    uniqid('', true)
+                ),
                 'logger' => $this->logger,
             ]);
         }

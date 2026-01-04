@@ -95,8 +95,8 @@ class RedisServerMutex implements ServerMutexInterface
                 return Timer::STOP;
             }
 
-            $this->redis->setNx($this->name, $this->owner);
-            $this->redis->expire($this->name, $this->expires);
+            // Atomic operations
+            $this->redis->set($this->name, $this->owner, ['EX' => $this->expires]);
             $ttl = $this->redis->ttl($this->name);
 
             $this->logger?->debug('[{connection}] Server mutex keepalive executed', $context + ['ttl' => $ttl]);
