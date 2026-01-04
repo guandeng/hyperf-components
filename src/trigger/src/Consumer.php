@@ -66,8 +66,8 @@ class Consumer
                 'owner' => sprintf(
                     '%s:%s:%s',
                     gethostname(),
-                    microtime(true),
-                    uniqid('', true)
+                    Util::getInternalIp(),
+                    microtime(true)
                 ),
                 'logger' => $this->logger,
             ]);
